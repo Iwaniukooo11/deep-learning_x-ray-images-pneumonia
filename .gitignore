@@ -1,2 +1,2 @@
-# Ignore all .jpeg files in the data folder
-data/*.jpeg
+# Ignore all .jpeg files in the data folder and its subfolders
+*.jpeg
