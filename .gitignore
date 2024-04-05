@@ -1,0 +1,2 @@
+# Ignore all .jpeg files in the data folder
+data/*.jpeg
