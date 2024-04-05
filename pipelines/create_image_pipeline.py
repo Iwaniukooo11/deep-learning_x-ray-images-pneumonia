@@ -1,4 +1,10 @@
 def create_image_pipeline(images,type):
+    if not images:
+        raise ValueError("images list is empty")
+    if type not in [0, 1]:
+        raise ValueError("type must be either 0 or 1")
+    
+    
     from sklearn.base import BaseEstimator, TransformerMixin
     from sklearn.preprocessing import Normalizer
     from skimage import io, img_as_ubyte, color

@@ -5,6 +5,11 @@
 
 
 def images_to_df(images,type=0):
+    if not images:
+        raise ValueError("images list is empty")
+    if type not in [0, 1]:
+        raise ValueError("type must be either 0 or 1")
+    
     print('start')
     import os
     from skimage import io, img_as_ubyte, color
