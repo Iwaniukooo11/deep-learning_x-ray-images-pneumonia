@@ -16,6 +16,7 @@ def create_image_pipeline(images,type):
     from sklearn.pipeline import make_pipeline
     from skimage.io import imread_collection
     from joblib import dump
+    from skimage.exposure import equalize_hist
 
 
 
@@ -38,7 +39,7 @@ def create_image_pipeline(images,type):
             #     return X_with_type
             # else:
             #     return X
-            return X
+            return equalize_hist(X)
 
     class ImageFlattener(BaseEstimator, TransformerMixin):
         def fit(self, X, y=None):
