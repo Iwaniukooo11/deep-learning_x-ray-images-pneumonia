@@ -17,17 +17,27 @@ def create_image_pipeline(images,type):
     from skimage.io import imread_collection
     from joblib import dump
     from skimage.exposure import equalize_hist
+    from skimage.morphology import binary_erosion
 
 
 
     class ImageProcessor(BaseEstimator, TransformerMixin):
-        def __init__(self, size=(128, 128)):
+        def __init__(self, size=(512, 512)):
             self.size = size
 
         def fit(self, X, y=None):
             return self
+        
+        def crop_center(self, img):
+            y, x = img.shape
+            crop_size = min(y, x)
+            start_x = x//2 - crop_size//2
+            start_y = y//2 - crop_size//2
+            return img[start_y:start_y+crop_size, start_x:start_x+crop_size]
 
         def transform(self, X, y=None):
+            X = [self.crop_center(image) for image in X]
+            
             X = [resize(image, (max(image.shape), max(image.shape))) for image in X]
             # X = [color.rgb2gray(image) for image in X]
             X = [img_as_ubyte(image) for image in X]
@@ -39,7 +49,9 @@ def create_image_pipeline(images,type):
             #     return X_with_type
             # else:
             #     return X
-            return equalize_hist(X)
+            X = [equalize_hist(image) for image in X]  # Issue fixed
+            # X = [binary_erosion(image) for image in X]  # Issue to fix
+            return X
 
     class ImageFlattener(BaseEstimator, TransformerMixin):
         def fit(self, X, y=None):
