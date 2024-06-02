@@ -18,6 +18,7 @@ def create_image_pipeline(images,type):
     from joblib import dump
     from skimage.exposure import equalize_hist
     from skimage.morphology import binary_erosion
+    from skimage.color import rgb2gray
 
 
 
@@ -28,7 +29,13 @@ def create_image_pipeline(images,type):
         def fit(self, X, y=None):
             return self
         
+       
+
         def crop_center(self, img):
+            # Convert the image to grayscale if it has more than two dimensions
+            print(img.shape)
+            if len(img.shape) > 2:
+                img = rgb2gray(img)
             y, x = img.shape
             crop_size = min(y, x)
             start_x = x//2 - crop_size//2
